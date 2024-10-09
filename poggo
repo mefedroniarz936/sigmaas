@@ -1,0 +1,28 @@
+-- Skrypt dodany do ServerScriptService lub StarterPlayer
+
+-- Funkcja, która doda podświetlenie (np. "Outline") do gracza
+local function highlightPlayer(player)
+    -- Sprawdź, czy gracz ma postać (character)
+    local character = player.Character or player.CharacterAdded:Wait()
+
+    -- Przejdź przez każdą część postaci gracza
+    for _, part in pairs(character:GetChildren()) do
+        if part:IsA("BasePart") then
+            -- Tworzymy efekt podświetlenia (Outline)
+            local highlight = Instance.new("SelectionBox")
+            highlight.Adornee = part
+            highlight.Parent = part
+            highlight.LineThickness = 0.05 -- Grubość linii
+            highlight.Color3 = Color3.new(1, 0, 0) -- Kolor czerwony
+            highlight.Transparency = 0.5 -- Przezroczystość
+        end
+    end
+end
+
+-- Obsługa wejścia nowych graczy do gry
+game.Players.PlayerAdded:Connect(function(player)
+    -- Podświetlenie gracza, gdy jego postać pojawi się w grze
+    player.CharacterAdded:Connect(function()
+        highlightPlayer(player)
+    end)
+end)
